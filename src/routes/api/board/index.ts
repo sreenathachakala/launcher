@@ -4,6 +4,7 @@ import { prisma } from '$lib/prismaClient';
 import { BoardType } from '../../../model/api/BoardType';
 import validateUser from '$lib/validateUser';
 import transformChannels from '$lib/transformChannels';
+import { get as initialize } from '../initialize';
 
 const BOARD_SELECTIONS = {
 	id: true,
@@ -34,11 +35,8 @@ const BOARD_SELECTIONS = {
 	}
 };
 
-export async function get(request: ServerRequest): Promise<void | EndpointOutput> {
-	const user = await validateUser(request, prisma);
-
-	let board;
-
+async function getBoard(user){
+	let board
 	if (user) {
 		board = await prisma.board.findFirst({
 			where: {
@@ -58,10 +56,21 @@ export async function get(request: ServerRequest): Promise<void | EndpointOutput
 			select: BOARD_SELECTIONS
 		});
 	}
+	return board;
+}
+export async function get(request: ServerRequest): Promise<void | EndpointOutput> {
+	const user = await validateUser(request, prisma);
+
+	let board = await getBoard(user);
+
 	if (!board) {
-		return {
-			status: 404
-		};
+		await initialize(undefined)
+		board = await getBoard(user)
+		if (!board) {
+			return {
+				status: 404
+			};
+		}
 	}
 
 	transformChannels(board.positions.map(it => it.channel), user)

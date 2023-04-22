@@ -7,6 +7,7 @@ export default (request: ServerRequest): any | undefined => {
 		const authJwt = getRawJwt(request)
 		return jwt.verify(authJwt, process.env["JWT_SECRET_KEY"]);
 	} catch (_) {
+		console.log(_)
 		return undefined
 	}
 }

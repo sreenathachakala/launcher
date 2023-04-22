@@ -6,6 +6,7 @@ import { BAD_REQUEST, NOT_FOUND } from '$lib/responseConstants';
 
 
 export async function put(request: ServerRequest): Promise<void | EndpointOutput> {
+	console.log("🚀 ~ file: backdrop.ts:9 ~ put ~ request:", request)
 	if (!request.body) {
 		return BAD_REQUEST;
 	}
@@ -21,6 +22,7 @@ export async function put(request: ServerRequest): Promise<void | EndpointOutput
 	}
 
 	const user = getAuth(request);
+	console.log("🚀 ~ file: backdrop.ts:25 ~ put ~ user:", user)
 	const googleId = user?.sub;
 
 	if (!googleId) {
@@ -30,6 +32,7 @@ export async function put(request: ServerRequest): Promise<void | EndpointOutput
 	if (!boardId) {
 		return BAD_REQUEST;
 	}
+	console.log("🚀 ~ file: backdrop.ts:31 ~ put ~ boardId:", boardId, googleId)
 
 	// check user access
 	const board = await prisma.board.findFirst({

@@ -235,20 +235,25 @@
 
 	async function assignBoard(res) {
 		const b = await res.json();
-		b.positions.sort((a, b) => {
+		if(b && b.positions){
+			b.positions.sort((a, b) => {
 			return a.position - b.position;
 		});
-		board = b;
-		if (board.backdrop) {
-			backdropStore.set(board.backdrop);
+			board = b;
+			if (board.backdrop) {
+				backdropStore.set(board.backdrop);
+			}
 		}
 	}
-	onMount(() => {
-		fetch('api/board', {
+
+	function getBoard(){
+		return fetch('api/board', {
 			credentials: 'include'
 		})
-			.then(assignBoard)
-			.catch((err) => {
+	}
+
+	onMount(() => {
+		getBoard().then(assignBoard).catch((err) => {
 				console.error(err.message);
 			});
 
@@ -639,7 +644,7 @@
 							on:click={() => {
 								handleRemove(position.channel);
 								analytics.track('Delete channel button clicked', {
-									channel: channel
+									channel: position.channel
 								});
 							}}
 							on:mouseover={() => {
