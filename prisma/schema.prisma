@@ -1,14 +1,14 @@
 // uncomment to use sqlite (recommended)
-//datasource db {
-//  provider = "sqlite"
-//  url      = "file:./dev.db"
-//}
+datasource db {
+ provider = "sqlite"
+ url      = "file:./dev.db"
+}
 
 // remove if using sqlite
-datasource db {
-  provider = "postgresql"
-  url      = env("PG_URL")
-}
+// datasource db {
+//   provider = "postgresql"
+//   url      = env("PG_URL")
+// }
 
 
 generator client {

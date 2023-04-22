@@ -136,7 +136,6 @@
 		});
 	});
 </script>
-
 <main
 	class="z-10 min-h-screen transition ease-in-out duration-200 {selectedBackdrop.darkMode
 		? 'text-white'
